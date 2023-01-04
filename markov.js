@@ -34,24 +34,22 @@ class MarkovMachine {
     // to this: {
     //  "Hello": ["I'm"],
     // }
+    const chains = new Map();
 
-    let chain = {}
-    let words = this.words
-    for (let i = 0; i < words.length; i++) {
+
+    for (let i = 0; i < this.words.length; i++) {
+      let word = this.words[i]
+      let nextWord = this.words[i + 1] || null;
       // check if word is a key in obj
-      if (words[i] in chain) {
-        // if value is an array
-        if (Array.isArray(chain[words[i]])) {
-          // if word is a key in obj check if next word is not in the value array
-          if (chain[words[i]].includes(words[i+1])){
-            continue;
-          } else {
-            // if it does not exit then push it.
-            chain[words[i]].push(words[i+1])
-          }
+      if (chains.has(word)) {
+        // if word is key in obj, push next word to value array
+          chains.get(word).push(nextWord);
+        } else {
+        // if word is not key in obj, set word as key & value as nextWord in an array
+          chains.set(word, [nextWord]);
         }
       }
-    }
+      return chains;
   }
 
 
